@@ -1,77 +1,181 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ConectaBem — Gestão Solidária</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConectaBem - Gestão de Estoques e Doações</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --primary-color: #10b981;
+            --border-color: #e5e7eb;
+        }
+        body.high-contrast {
+            --bg-color: #000000;
+            --card-bg: #111111;
+            --text-color: #ffff00;
+            --primary-color: #00ff00;
+            --border-color: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            transition: all 0.2s ease;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--card-bg);
+            padding: 15px 25px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        .btn-acessibilidade {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        input, select, button.submit {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px 0;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+        }
+        button.submit {
+            background-color: var(--primary-color);
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .badge-urgente {
+            background-color: #ef4444;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        .badge-regular {
+            background-color: #10b981;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-  <header class="app-header">
-    <h1>ConectaBem</h1>
-    <nav id="main-nav" class="hidden" aria-label="Navegação principal">
-      <button type="button" onclick="mostrarTela('tela-estoque')" class="nav-btn">📦 Estoque</button>
-      <button type="button" onclick="mostrarTela('tela-alertas')" class="nav-btn">⚠️ Alertas</button>
-      <button type="button" onclick="sair()" class="nav-btn btn-sair">Sair</button>
-    </nav>
-  </header>
+    <header role="banner">
+        <div>
+            <h1>🌱 ConectaBem</h1>
+            <small>Plataforma de Combate ao Desperdício e Apoio Social (ODS 2 & ODS 12)</small>
+        </div>
+        <button class="btn-acessibilidade" onclick="alternarContraste()" aria-label="Ativar ou desativar modo de alto contraste">
+            👁️ Alto Contraste (Acessibilidade)
+        </button>
+    </header>
 
-  <main class="container">
-    TELA 1: AUTENTICAÇÃO 
-    <section id="tela-login" class="card">
-      <h2>Acesso do Voluntário</h2>
-      <p class="subtitle">Entre para gerenciar o estoque e as entregas.</p>
-      <form id="form-login">
-        <label for="email">E-mail institucional</label>
-        <input type="email" id="email" placeholder="voluntario@conectabem.org" required>
-        
-        <label for="senha">Senha</label>
-        <input type="password" id="senha" placeholder="Digite sua senha" required>
-        
-        <button type="submit" class="btn-primary">Entrar no Sistema</button>
-      </form>
-    </section>
+    <main class="container" role="main">
+        <section class="card" aria-labelledby="titulo-cadastro">
+            <h2 id="titulo-cadastro">Cadastrar Novo Lote</h2>
+            <form onsubmit="adicionarLote(event)">
+                <label for="produto">Nome do Alimento / Produto:</label>
+                <input type="text" id="produto" placeholder="Ex: Arroz Integral 5kg" required>
+                
+                <label for="quantidade">Quantidade (unidades):</label>
+                <input type="number" id="quantidade" min="1" placeholder="Ex: 20" required>
+                
+                <label for="status">Prazo de Validade:</label>
+                <select id="status">
+                    <option value="Urgente">Menos de 7 dias (Urgente)</option>
+                    <option value="Regular">Mais de 30 dias (Regular)</option>
+                </select>
+                
+                <button type="submit" class="submit">+ Registrar no Estoque</button>
+            </form>
+        </section>
 
-    TELA 2: GESTÃO DE ESTOQUE E TRIAGEM 
-    <section id="tela-estoque" class="card hidden">
-      <h2>Triagem e Cadastro de Lotes</h2>
-      <form id="form-estoque">
-        <label for="produto">Item / Alimento</label>
-        <input type="text" id="produto" placeholder="Ex: Arroz Integral 5kg" required>
+        <section class="card" aria-labelledby="titulo-estoque">
+            <h2 id="titulo-estoque">Monitoramento de Lotes Disponíveis para ONGs</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Prioridade / Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-lotes">
+                    <tr>
+                        <td>Leite Integral UHT (Caixa 12un)</td>
+                        <td>15 caixas</td>
+                        <td><span class="badge-urgente">URGENTE (Vence em 3 dias)</span></td>
+                    </tr>
+                    <tr>
+                        <td>Feijão Carioca Tipo 1</td>
+                        <td>40 pacotes</td>
+                        <td><span class="badge-regular">REGULAR</span></td>
+                    </tr>
+                    <tr>
+                        <td>Cesta Básica Comunitária</td>
+                        <td>10 unidades</td>
+                        <td><span class="badge-urgente">URGENTE (Vence em 5 dias)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
 
-        <label for="quantidade">Quantidade (unidades/kg)</label>
-        <input type="number" id="quantidade" min="1" placeholder="Ex: 20" required>
-
-        <label for="validade">Data de Validade</label>
-        <input type="date" id="validade" required>
-
-        <button type="submit" class="btn-primary">+ Registrar Lote</button>
-      </form>
-
-      <h3>Lotes em Estoque</h3>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Qtd</th>
-              <th>Validade</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="tabela-estoque"></tbody>
-        </table>
-      </div>
-    </section>
-
-    TELA 3: ALERTAS E BENEFICIÁRIOS 
-    <section id="tela-alertas" class="card hidden">
-      <h2>Alertas de Vencimento e Destino</h2>
-      <p class="subtitle">Prioridade de entrega para evitar desperdícios.</p>
-      <div id="lista-alertas" class="alert-list"></div>
-    </section>
-  </main>
-
-  <script src="app.js"></script>
+    <script>
+        function alternarContraste() {
+            document.body.classList.toggle('high-contrast');
+        }
+        function adicionarLote(e) {
+            e.preventDefault();
+            const prod = document.getElementById('produto').value;
+            const qtd = document.getElementById('quantidade').value;
+            const status = document.getElementById('status').value;
+            const tabela = document.getElementById('tabela-lotes');
+            const badge = status === 'Urgente' 
+                ? '<span class="badge-urgente">URGENTE</span>' 
+                : '<span class="badge-regular">REGULAR</span>';
+            tabela.innerHTML += `<tr><td>${prod}</td><td>${qtd} un.</td><td>${badge}</td></tr>`;
+            e.target.reset();
+        }
+    </script>
 </body>
 </html>
