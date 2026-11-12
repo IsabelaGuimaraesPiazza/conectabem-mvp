@@ -13,11 +13,11 @@
             --border-color: #e5e7eb;
         }
         body.high-contrast {
-            --bg-color: #000000;
-            --card-bg: #111111;
-            --text-color: #ffff00;
-            --primary-color: #00ff00;
-            --border-color: #ffffff;
+            --bg-color: #000000 !important;
+            --card-bg: #111111 !important;
+            --text-color: #ffff00 !important;
+            --primary-color: #00ff00 !important;
+            --border-color: #ffffff !important;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -64,6 +64,8 @@
             border-radius: 5px;
             border: 1px solid var(--border-color);
             box-sizing: border-box;
+            background-color: var(--card-bg);
+            color: var(--text-color);
         }
         button.submit {
             background-color: var(--primary-color);
