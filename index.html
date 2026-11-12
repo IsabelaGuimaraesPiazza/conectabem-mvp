@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ConectaBem — Gestão Solidária</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>ConectaBem</h1>
+    <nav id="main-nav" class="hidden" aria-label="Navegação principal">
+      <button type="button" onclick="mostrarTela('tela-estoque')" class="nav-btn">📦 Estoque</button>
+      <button type="button" onclick="mostrarTela('tela-alertas')" class="nav-btn">⚠️ Alertas</button>
+      <button type="button" onclick="sair()" class="nav-btn btn-sair">Sair</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    TELA 1: AUTENTICAÇÃO 
+    <section id="tela-login" class="card">
+      <h2>Acesso do Voluntário</h2>
+      <p class="subtitle">Entre para gerenciar o estoque e as entregas.</p>
+      <form id="form-login">
+        <label for="email">E-mail institucional</label>
+        <input type="email" id="email" placeholder="voluntario@conectabem.org" required>
+        
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" placeholder="Digite sua senha" required>
+        
+        <button type="submit" class="btn-primary">Entrar no Sistema</button>
+      </form>
+    </section>
+
+    TELA 2: GESTÃO DE ESTOQUE E TRIAGEM 
+    <section id="tela-estoque" class="card hidden">
+      <h2>Triagem e Cadastro de Lotes</h2>
+      <form id="form-estoque">
+        <label for="produto">Item / Alimento</label>
+        <input type="text" id="produto" placeholder="Ex: Arroz Integral 5kg" required>
+
+        <label for="quantidade">Quantidade (unidades/kg)</label>
+        <input type="number" id="quantidade" min="1" placeholder="Ex: 20" required>
+
+        <label for="validade">Data de Validade</label>
+        <input type="date" id="validade" required>
+
+        <button type="submit" class="btn-primary">+ Registrar Lote</button>
+      </form>
+
+      <h3>Lotes em Estoque</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qtd</th>
+              <th>Validade</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-estoque"></tbody>
+        </table>
+      </div>
+    </section>
+
+    TELA 3: ALERTAS E BENEFICIÁRIOS 
+    <section id="tela-alertas" class="card hidden">
+      <h2>Alertas de Vencimento e Destino</h2>
+      <p class="subtitle">Prioridade de entrega para evitar desperdícios.</p>
+      <div id="lista-alertas" class="alert-list"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
